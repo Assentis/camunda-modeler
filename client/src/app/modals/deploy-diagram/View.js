@@ -134,6 +134,19 @@ class View extends PureComponent {
                       onFocusChange={ onFocusChange }
                     />
 
+                    <div/>
+
+                    <div>
+                      <Field
+                        name="skipSslCertificateValidation"
+                        type="checkbox"
+                        className="checkbox"
+                        onFocusChange={ onFocusChange }
+                      />
+                      <label className="checkboxLabel"
+                             htmlFor="skipSslCertificateValidation">Skip SSL certificate validation (unsafe!)</label>
+                    </div>
+
                     <div>
                       <label htmlFor="authType">Authentication</label>
                     </div>

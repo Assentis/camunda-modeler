@@ -29,6 +29,7 @@ const defaultState = {
 
 const initialFormValues = {
   endpointUrl: '',
+  skipSslCertificateValidation: false,
   tenantId: '',
   deploymentName: '',
   authType: 'none',
@@ -162,7 +163,8 @@ class DeployDiagramModal extends PureComponent {
     const payload = {
       endpointUrl,
       deploymentName: values.deploymentName,
-      tenantId: values.tenantId
+      tenantId: values.tenantId,
+      skipSslCertificateValidation: values.skipSslCertificateValidation
     };
 
     const auth = this.getAuth(values);

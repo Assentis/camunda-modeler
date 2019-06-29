@@ -26,7 +26,18 @@ class Deployer {
 
       const requestParams = this.getRequestParams(options);
 
+      const { skipSslCertificateValidation } = options;
+
+      let tempNodeTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+      if (skipSslCertificateValidation) {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+      }
+
       const serverResponse = await this.fetch(url, requestParams);
+
+      if (skipSslCertificateValidation) {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = tempNodeTlsRejectUnauthorized;
+      }
 
       if (!serverResponse.ok) {
         const error = await getErrorFromResponse(serverResponse);
