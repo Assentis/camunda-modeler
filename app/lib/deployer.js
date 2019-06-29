@@ -28,16 +28,7 @@ class Deployer {
 
       const { skipSslCertificateValidation } = options;
 
-      let tempNodeTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
-      if (skipSslCertificateValidation) {
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-      }
-
-      const serverResponse = await this.fetch(url, requestParams);
-
-      if (skipSslCertificateValidation) {
-        process.env.NODE_TLS_REJECT_UNAUTHORIZED = tempNodeTlsRejectUnauthorized;
-      }
+      const serverResponse = await this.sendDeployment(url, requestParams, skipSslCertificateValidation);
 
       if (!serverResponse.ok) {
         const error = await getErrorFromResponse(serverResponse);
@@ -57,6 +48,20 @@ class Deployer {
       error.deploymentName = options.deploymentName;
 
       return cb(error);
+    }
+  }
+
+  async sendDeployment(url, requestParams, skipSslCertificateValidation) {
+    let tempNodeTlsRejectUnauthorized = process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+    if (skipSslCertificateValidation) {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    }
+    try {
+      return await this.fetch(url, requestParams);
+    } finally {
+      if (skipSslCertificateValidation) {
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = tempNodeTlsRejectUnauthorized;
+      }
     }
   }
 
